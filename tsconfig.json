@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "suppressExcessPropertyErrors": true,
+    "outDir": "release/source",
+    "declarationDir": "release/types"
+  },
+  "include": ["./source/**/*"]
+}

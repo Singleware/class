@@ -11,7 +11,7 @@ import { Trace } from './trace';
  */
 export namespace Helper {
   /**
-   * Safe place to map all data of class instances.
+   * Safe place to map all class instances data.
    */
   const vault: WeakMap<Object, any> = new WeakMap();
 
@@ -30,23 +30,26 @@ export namespace Helper {
   };
 
   /**
-   * Safe place to put all entries of the function calls.
+   * Safe place to put all function call entries.
    */
   var stack: Entry = head;
 
   /**
-   * Try to get the class context name from the specified prototype.
-   * @param prototype Prototype.
-   * @returns Returns the class name.
+   * Check whether the current context is valid or not.
    */
-  function contextName(prototype: any): string | undefined {
-    return prototype ? prototype.name || prototype.constructor.name : void 0;
+  function contextValidate(): void {
+    if (!stack.context || !stack.prototype) {
+      throw new Error(`There is no current context.`);
+    }
+    if (stack.context === stack.prototype) {
+      throw new Error('There is no resolved context, please call update() method.');
+    }
   }
 
   /**
    * Restores the current stack for the given context.
    * @param context Method context.
-   * @returns Returns true when the context was contextRestored, false otherwise.
+   * @returns Returns true when the context was restored, false otherwise.
    */
   function contextRestore(context: any): boolean {
     if (!waiting.has(context)) {
@@ -61,7 +64,7 @@ export namespace Helper {
    * Resolves the current stack for the given context.
    * @param context Method context.
    * @param prototype Method prototype.
-   * @returns Returns true when the context was contextResolved, false otherwise.
+   * @returns Returns true when the context was resolved, false otherwise.
    */
   function contextResolve(context: any, prototype: any): boolean {
     if (stack.context !== prototype) {
@@ -72,7 +75,7 @@ export namespace Helper {
   }
 
   /**
-   * Insert the specified call entry into the call list.
+   * Insert the specified call entry into the next node of call stack.
    * @param entry Entry instance.
    * @returns Returns the inserted entry.
    */
@@ -85,9 +88,9 @@ export namespace Helper {
   }
 
   /**
-   * Removes the specified call entry from the call list.
+   * Removes the specified call entry from the call stack.
    * @param entry Entry instance.
-   * @returns Returns the inserted entry.
+   * @returns Returns the removed entry.
    */
   function removeEntry(entry: Entry): Entry {
     const previous = <Entry>entry.previous;
@@ -99,22 +102,22 @@ export namespace Helper {
   }
 
   /**
-   * Performs the specified callback asynchronously setting the call entry to ensure its access rules.
+   * Calls asynchronously the specified callback setting the call entry to ensure its access rules.
    * @param entry Call entry.
    * @param callback Method callback.
    * @param parameters Method parameters.
    * @returns Returns the promise of the called method.
    */
-  async function wrappedCallAsync(entry: Entry, callback: Callable, ...parameters: any[]): Promise<any> {
+  async function asyncWrappedCall(entry: Entry, callback: Callable, ...parameters: any[]): Promise<any> {
     try {
       stack = insertEntry(entry);
       const promise = callback.call(entry.context, ...parameters);
       const previous = <Entry>entry.previous;
       const result = await promise;
-      if (previous.context !== entry.context) {
-        waiting.delete(entry.context);
-      } else {
+      if (previous.context === entry.context) {
         waiting.set(entry.context, previous);
+      } else {
+        waiting.delete(entry.context);
       }
       return result;
     } catch (exception) {
@@ -125,13 +128,13 @@ export namespace Helper {
   }
 
   /**
-   * Performs the specified callback synchronously setting the call entry to ensure its access rules.
+   * Calls synchronously the specified callback setting the call entry to ensure its access rules.
    * @param entry Call entry.
    * @param callback Method callback.
    * @param parameters Method parameters.
    * @returns Returns the same value of the called method.
    */
-  function wrappedCallSync(entry: Entry, callback: Callable, ...parameters: any[]): any {
+  function syncWrappedCall(entry: Entry, callback: Callable, ...parameters: any[]): any {
     try {
       stack = insertEntry(entry);
       return callback.call(entry.context, ...parameters);
@@ -155,11 +158,11 @@ export namespace Helper {
     const entry = { name: callback.name, context: context, prototype: prototype, previous: stack, next: void 0 };
     if (callback.constructor.name === 'AsyncFunction') {
       const saved = stack;
-      const promise = wrappedCallAsync(entry, callback, ...parameters);
+      const promise = asyncWrappedCall(entry, callback, ...parameters);
       stack = saved;
       return promise;
     } else {
-      return wrappedCallSync(entry, callback, ...parameters);
+      return syncWrappedCall(entry, callback, ...parameters);
     }
   }
 
@@ -193,19 +196,20 @@ export namespace Helper {
    * @returns Returns the specified property descriptor.
    */
   function wrapMember(wrapper: Callable, prototype: any, property: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor {
+    descriptor.enumerable = false;
+    descriptor.configurable = false;
     if (descriptor.value instanceof Function) {
       descriptor.writable = false;
       wrapper('value', prototype, property, descriptor);
     } else {
-      if (descriptor.get instanceof Function) {
-        wrapper('get', prototype, property, descriptor);
-      }
       if (descriptor.set instanceof Function) {
         wrapper('set', prototype, property, descriptor);
       }
+      if (descriptor.get instanceof Function) {
+        descriptor.enumerable = true;
+        wrapper('get', prototype, property, descriptor);
+      }
     }
-    descriptor.enumerable = false;
-    descriptor.configurable = false;
     return descriptor;
   }
 
@@ -238,7 +242,7 @@ export namespace Helper {
       contextRestore(this) || contextResolve(this, prototype);
       const constructor = prototype.constructor;
       if (!stack.context || (!(stack.context instanceof constructor) && !(stack.context.constructor instanceof constructor))) {
-        throw new TypeError(`Access to protected member '${contextName(prototype)}::${property as string}' has been denied.`);
+        throw new TypeError(`Access to protected member '${property as string}' has been denied.`);
       }
       return wrappedCall(this, prototype, callback, ...parameters);
     };
@@ -257,7 +261,7 @@ export namespace Helper {
     (<any>descriptor)[type] = function callAsPrivate(this: any, ...parameters: any[]): any {
       contextRestore(this) || contextResolve(this, prototype);
       if (!stack.prototype || (stack.prototype !== prototype && stack.prototype.constructor !== prototype)) {
-        throw new TypeError(`Access to private member '${contextName(prototype)}::${property as string}' has been denied.`);
+        throw new TypeError(`Access to private member '${property as string}' has been denied.`);
       }
       return wrappedCall(this, prototype, callback, ...parameters);
     };
@@ -316,7 +320,7 @@ export namespace Helper {
     let current = head;
     while (current) {
       stack.push({
-        context: contextName(current.prototype) || 'global',
+        context: current.prototype ? current.prototype.constructor.name : 'global',
         method: current.name
       });
       current = <Entry>current.next;
@@ -338,26 +342,6 @@ export namespace Helper {
   }
 
   /**
-   * Binds the specified callback to be called with the current access rules.
-   * @param callback Method callback.
-   * @returns Returns the same value of the called method.
-   * @throws Throws an error when the current context is not defined.
-   */
-  export function bind(callback: Callable): Callable {
-    const context = stack.context;
-    const prototype = stack.prototype;
-    if (!context || !prototype) {
-      throw new Error(`There is no current context.`);
-    }
-    if (stack.context === stack.prototype) {
-      throw new Error('There is no contextResolved context, please call update() method.');
-    }
-    return function(...parameters: any[]) {
-      return wrappedCall(context, prototype, callback, ...parameters);
-    };
-  }
-
-  /**
    * Calls the specified callback with the given parameters exposing only public members.
    * @param callback Method callback.
    * @param parameters Method parameters.
@@ -366,5 +350,74 @@ export namespace Helper {
    */
   export function call(callback: Callable, ...parameters: any[]): any {
     return wrappedCall(void 0, void 0, callback, ...parameters);
+  }
+
+  /**
+   * Binds the specified property descriptor to be called with the current access rules.
+   * @param descriptor Property descriptor.
+   * @returns Returns a new wrapped property descriptor.
+   * @throws Throws an error when the specified property was not found.
+   */
+  export function bindDescriptor(descriptor: PropertyDescriptor): PropertyDescriptor {
+    const modified = <PropertyDescriptor>{ ...descriptor };
+    if (modified.value) {
+      modified.value = bindCallback(modified.value);
+    } else {
+      if (modified.get) {
+        modified.get = bindCallback(modified.get);
+      }
+      if (modified.set) {
+        modified.set = bindCallback(modified.set);
+      }
+    }
+    return modified;
+  }
+
+  /**
+   * Binds the specified callback to be called with the current access rules.
+   * @param callback Method callback.
+   * @returns Returns the same value of the called method.
+   * @throws Throws an error when the current context is not defined.
+   */
+  export function bindCallback(callback: Callable): Callable {
+    contextValidate();
+    const context = stack.context;
+    const prototype = stack.prototype;
+    return function(...parameters: any[]) {
+      return wrappedCall(context, prototype, callback, ...parameters);
+    };
+  }
+
+  /**
+   * Binds the specified promise to be called with the current access rules.
+   * @param promise Promise object.
+   * @returns Returns the asynchronous method to calls the wrapped promise.
+   * @throws Throws an error when the current context is not defined.
+   */
+  export function bindPromise<T>(promise: Promise<T>): Promise<T> {
+    contextValidate();
+    const saved = stack;
+    promise.finally(() => {
+      stack = saved;
+    });
+    return promise;
+  }
+
+  /**
+   * Binds the specified callback, property descriptor or promise to be called with the current access rules.
+   * @param input Method callback, property descriptor or promise.
+   * @returns Returns the wrapped input.
+   * @throws Throws an error when the current context is not defined.
+   */
+  export function bind<T extends Object>(input: T): any {
+    if (input instanceof Function) {
+      return bindCallback(<any>input);
+    } else if (input instanceof Promise) {
+      return bindPromise(<any>input);
+    } else if (input instanceof Object) {
+      return bindDescriptor(<any>input);
+    } else {
+      throw new TypeError(`Unsupported bind input format, use: Function, Promise or Descriptor object.`);
+    }
   }
 }

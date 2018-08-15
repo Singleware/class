@@ -39,13 +39,6 @@ export declare namespace Helper {
      */
     function update<T extends Object>(instance: T): void;
     /**
-     * Binds the specified callback to be called with the current access rules.
-     * @param callback Method callback.
-     * @returns Returns the same value of the called method.
-     * @throws Throws an error when the current context is not defined.
-     */
-    function bind(callback: Callable): Callable;
-    /**
      * Calls the specified callback with the given parameters exposing only public members.
      * @param callback Method callback.
      * @param parameters Method parameters.
@@ -53,4 +46,32 @@ export declare namespace Helper {
      * @throws Throws the same exception from the called method.
      */
     function call(callback: Callable, ...parameters: any[]): any;
+    /**
+     * Binds the specified property descriptor to be called with the current access rules.
+     * @param descriptor Property descriptor.
+     * @returns Returns a new wrapped property descriptor.
+     * @throws Throws an error when the specified property was not found.
+     */
+    function bindDescriptor(descriptor: PropertyDescriptor): PropertyDescriptor;
+    /**
+     * Binds the specified callback to be called with the current access rules.
+     * @param callback Method callback.
+     * @returns Returns the same value of the called method.
+     * @throws Throws an error when the current context is not defined.
+     */
+    function bindCallback(callback: Callable): Callable;
+    /**
+     * Binds the specified promise to be called with the current access rules.
+     * @param promise Promise object.
+     * @returns Returns the asynchronous method to calls the wrapped promise.
+     * @throws Throws an error when the current context is not defined.
+     */
+    function bindPromise<T>(promise: Promise<T>): Promise<T>;
+    /**
+     * Binds the specified callback, property descriptor or promise to be called with the current access rules.
+     * @param input Method callback, property descriptor or promise.
+     * @returns Returns the wrapped input.
+     * @throws Throws an error when the current context is not defined.
+     */
+    function bind<T extends Object>(input: T): any;
 }

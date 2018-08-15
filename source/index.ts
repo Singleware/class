@@ -13,3 +13,6 @@ export const trace = Helper.trace;
 export const update = Helper.update;
 export const call = Helper.call;
 export const bind = Helper.bind;
+export const bindDescriptor = Helper.bindDescriptor;
+export const bindCallback = Helper.bindCallback;
+export const bindPromise = Helper.bindPromise;

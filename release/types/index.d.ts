@@ -11,3 +11,6 @@ export declare const trace: typeof Helper.trace;
 export declare const update: typeof Helper.update;
 export declare const call: typeof Helper.call;
 export declare const bind: typeof Helper.bind;
+export declare const bindDescriptor: typeof Helper.bindDescriptor;
+export declare const bindCallback: typeof Helper.bindCallback;
+export declare const bindPromise: typeof Helper.bindPromise;

@@ -14,3 +14,6 @@ exports.trace = helper_1.Helper.trace;
 exports.update = helper_1.Helper.update;
 exports.call = helper_1.Helper.call;
 exports.bind = helper_1.Helper.bind;
+exports.bindDescriptor = helper_1.Helper.bindDescriptor;
+exports.bindCallback = helper_1.Helper.bindCallback;
+exports.bindPromise = helper_1.Helper.bindPromise;

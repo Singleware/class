@@ -30,7 +30,7 @@ export declare namespace Helper {
     function Private(): MemberDecorator;
     /**
      * Gets the current information about the call stack.
-     * @returns Returns an array containing the stack information.
+     * @returns Returns an array containing the calling stack information.
      */
     function trace(): Trace[];
     /**

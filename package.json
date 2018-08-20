@@ -7,7 +7,7 @@
   "name": "@singleware/class",
   "description": "Singleware class visibility package.",
   "license": "MIT",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [

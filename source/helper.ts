@@ -18,7 +18,7 @@ export namespace Helper {
   /**
    * Safe place to map all entries of pending asynchronous functions.
    */
-  const waiting: WeakMap<Object, Entry> = new WeakMap();
+  const waiting: WeakMap<Object, Entry[]> = new WeakMap();
 
   /**
    * First call entry.
@@ -35,6 +35,50 @@ export namespace Helper {
   var stack: Entry = head;
 
   /**
+   * Push a new entry into the waiting context stack.
+   * @param context Method context.
+   * @param entry Context entry.
+   */
+  function lazyContextPush(context: any, entry: Entry): void {
+    const list = <Entry[]>waiting.get(context);
+    if (list) {
+      list.push(entry);
+    } else {
+      waiting.set(context, [entry]);
+    }
+  }
+
+  /**
+   * Restores an entry from the waiting context stack into the current stack.
+   * @param context Method context.
+   * @returns Returns true when the context was restored, false otherwise.
+   */
+  function lazyContextRestore(context: any): boolean {
+    const entry = lazyContextPop(context);
+    if (entry) {
+      stack = entry;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Removes an entry from the waiting context stack.
+   * @param context Method context.
+   * @returns Returns the removed context.
+   */
+  function lazyContextPop(context: any): any {
+    const list = <Entry[]>waiting.get(context);
+    if (list) {
+      const entry = list.pop();
+      if (list.length === 0) {
+        waiting.delete(context);
+      }
+      return entry;
+    }
+  }
+
+  /**
    * Check whether the current context is valid or not.
    */
   function contextValidate(): void {
@@ -44,20 +88,6 @@ export namespace Helper {
     if (stack.context === stack.prototype) {
       throw new Error('There is no resolved context, please call update() method.');
     }
-  }
-
-  /**
-   * Restores the current stack for the given context.
-   * @param context Method context.
-   * @returns Returns true when the context was restored, false otherwise.
-   */
-  function contextRestore(context: any): boolean {
-    if (!waiting.has(context)) {
-      return false;
-    }
-    stack = <Entry>waiting.get(context);
-    waiting.delete(context);
-    return true;
   }
 
   /**
@@ -75,7 +105,7 @@ export namespace Helper {
   }
 
   /**
-   * Insert the specified call entry into the next node of call stack.
+   * Insert the specified entry into the next call stack node.
    * @param entry Entry instance.
    * @returns Returns the inserted entry.
    */
@@ -88,7 +118,7 @@ export namespace Helper {
   }
 
   /**
-   * Removes the specified call entry from the call stack.
+   * Removes the specified entry from the call stack.
    * @param entry Entry instance.
    * @returns Returns the removed entry.
    */
@@ -115,9 +145,9 @@ export namespace Helper {
       const previous = <Entry>entry.previous;
       const result = await promise;
       if (previous.context === entry.context) {
-        waiting.set(entry.context, previous);
+        lazyContextPush(entry.context, previous);
       } else {
-        waiting.delete(entry.context);
+        lazyContextPop(entry.context);
       }
       return result;
     } catch (exception) {
@@ -155,15 +185,14 @@ export namespace Helper {
    * @throws Throws the same exception from the called method.
    */
   function wrappedCall(context: any, prototype: any, callback: Callable, ...parameters: any[]): any {
-    const entry = { name: callback.name, context: context, prototype: prototype, previous: stack, next: void 0 };
+    const entry = { name: callback.name, context: context, prototype: prototype, previous: stack };
     if (callback.constructor.name === 'AsyncFunction') {
       const saved = stack;
       const promise = asyncWrappedCall(entry, callback, ...parameters);
       stack = saved;
       return promise;
-    } else {
-      return syncWrappedCall(entry, callback, ...parameters);
     }
+    return syncWrappedCall(entry, callback, ...parameters);
   }
 
   /**
@@ -223,7 +252,7 @@ export namespace Helper {
   function wrapAsPublic(type: string, prototype: any, property: PropertyKey, descriptor: PropertyDescriptor): void {
     const callback = (<any>descriptor)[type];
     (<any>descriptor)[type] = function callAsPublic(this: any, ...parameters: any[]): any {
-      contextRestore(this) || contextResolve(this, prototype);
+      lazyContextRestore(this) || contextResolve(this, prototype);
       return wrappedCall(this, prototype, callback, ...parameters);
     };
   }
@@ -239,9 +268,10 @@ export namespace Helper {
   function wrapAsProtected(type: string, prototype: any, property: PropertyKey, descriptor: PropertyDescriptor): void {
     const callback = (<any>descriptor)[type];
     (<any>descriptor)[type] = function callAsProtected(this: any, ...parameters: any[]): any {
-      contextRestore(this) || contextResolve(this, prototype);
-      const constructor = prototype.constructor;
-      if (!stack.context || (!(stack.context instanceof constructor) && !(stack.context.constructor instanceof constructor))) {
+      lazyContextRestore(this) || contextResolve(this, prototype);
+      const allowType = prototype.constructor;
+      const allowSelf = stack.context instanceof allowType || (stack.context && stack.context.constructor instanceof allowType);
+      if (!allowSelf) {
         throw new TypeError(`Access to protected member '${property as string}' has been denied.`);
       }
       return wrappedCall(this, prototype, callback, ...parameters);
@@ -259,8 +289,11 @@ export namespace Helper {
   function wrapAsPrivate(type: string, prototype: any, property: PropertyKey, descriptor: PropertyDescriptor): void {
     const callback = (<any>descriptor)[type];
     (<any>descriptor)[type] = function callAsPrivate(this: any, ...parameters: any[]): any {
-      contextRestore(this) || contextResolve(this, prototype);
-      if (!stack.prototype || (stack.prototype !== prototype && stack.prototype.constructor !== prototype)) {
+      lazyContextRestore(this) || contextResolve(this, prototype);
+      const allowType = stack.prototype.constructor;
+      const allowSelf = stack.prototype === prototype || prototype === allowType;
+      const allowBase = stack.context instanceof allowType || stack.context.constructor instanceof allowType;
+      if (!allowSelf && !allowBase) {
         throw new TypeError(`Access to private member '${property as string}' has been denied.`);
       }
       return wrappedCall(this, prototype, callback, ...parameters);
@@ -313,7 +346,7 @@ export namespace Helper {
 
   /**
    * Gets the current information about the call stack.
-   * @returns Returns an array containing the stack information.
+   * @returns Returns an array containing the calling stack information.
    */
   export function trace(): Trace[] {
     const stack = [];

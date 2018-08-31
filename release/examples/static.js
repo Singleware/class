@@ -6,8 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Base_1;
-"use strict";
 /**
  * Copyright (C) 2018 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -19,7 +17,7 @@ const Class = require("../source");
 /**
  * Example of static members.
  */
-let Base = Base_1 = class Base {
+let Base = class Base {
     /**
      * Example of private method.
      */
@@ -31,7 +29,7 @@ let Base = Base_1 = class Base {
      */
     static protectedCall() {
         console.log('PROTECTED CALL');
-        Base_1.privateCall();
+        this.privateCall();
     }
     /**
      * Example of public method.
@@ -49,7 +47,7 @@ __decorate([
 __decorate([
     Class.Public()
 ], Base, "publicCall", null);
-Base = Base_1 = __decorate([
+Base = __decorate([
     Class.Describe()
 ], Base);
 /**
@@ -61,9 +59,8 @@ let Derived = class Derived extends Base {
      */
     static publicCall() {
         console.log('OVERRIDING CALL');
-        Base.publicCall();
-        Base.protectedCall();
-        // (Base as any).privateCall();
+        super.publicCall();
+        this.protectedCall();
     }
 };
 __decorate([

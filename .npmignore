@@ -2,6 +2,7 @@
 tsconfig.json
 node_modules/
 release/examples/
+release/tests/
 examples/
 source/
 tests/

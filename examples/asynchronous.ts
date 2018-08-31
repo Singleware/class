@@ -8,6 +8,13 @@
 import * as Class from '../source';
 
 /**
+ * Example of asynchronous method.
+ */
+async function print(text: string): Promise<void> {
+  console.log(text);
+}
+
+/**
  * Example of asynchronous class.
  */
 @Class.Describe()
@@ -17,15 +24,12 @@ class AsyncA {
    * @param interval Method interval.
    */
   @Class.Private()
-  private async privateCall(interval: number): Promise<void> {
+  private privateCall(interval: number): Promise<void> {
     return new Promise<void>((resolve: any, reject: any) => {
-      setTimeout(
-        Class.bind(() => {
-          console.log(`A: PRIVATE CALL '${interval}'`);
-          resolve();
-        }),
-        interval
-      );
+      setTimeout(() => {
+        print(`A: PRIVATE CALL '${interval}'`);
+        resolve();
+      }, interval);
     });
   }
   /**
@@ -59,15 +63,12 @@ class AsyncB {
    * @param interval Method interval.
    */
   @Class.Private()
-  private async privateCall(interval: number): Promise<void> {
+  private privateCall(interval: number): Promise<void> {
     return new Promise<void>((resolve: any, reject: any) => {
-      setTimeout(
-        Class.bind(() => {
-          console.log(`B: PRIVATE CALL '${interval}'`);
-          resolve();
-        }),
-        interval
-      );
+      setTimeout(() => {
+        console.log(`B: PRIVATE CALL '${interval}'`);
+        resolve();
+      }, interval);
     });
   }
   /**

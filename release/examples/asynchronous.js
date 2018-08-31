@@ -15,6 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const Class = require("../source");
 /**
+ * Example of asynchronous method.
+ */
+async function print(text) {
+    console.log(text);
+}
+/**
  * Example of asynchronous class.
  */
 let AsyncA = class AsyncA {
@@ -22,12 +28,12 @@ let AsyncA = class AsyncA {
      * Example of private method.
      * @param interval Method interval.
      */
-    async privateCall(interval) {
+    privateCall(interval) {
         return new Promise((resolve, reject) => {
-            setTimeout(Class.bind(() => {
-                console.log(`A: PRIVATE CALL '${interval}'`);
+            setTimeout(() => {
+                print(`A: PRIVATE CALL '${interval}'`);
                 resolve();
-            }), interval);
+            }, interval);
         });
     }
     /**
@@ -68,12 +74,12 @@ let AsyncB = class AsyncB {
      * Example of private method.
      * @param interval Method interval.
      */
-    async privateCall(interval) {
+    privateCall(interval) {
         return new Promise((resolve, reject) => {
-            setTimeout(Class.bind(() => {
+            setTimeout(() => {
                 console.log(`B: PRIVATE CALL '${interval}'`);
                 resolve();
-            }), interval);
+            }, interval);
         });
     }
     /**

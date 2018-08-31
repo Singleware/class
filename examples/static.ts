@@ -25,7 +25,7 @@ class Base {
   @Class.Protected()
   protected static protectedCall(): void {
     console.log('PROTECTED CALL');
-    Base.privateCall();
+    this.privateCall();
   }
   /**
    * Example of public method.
@@ -47,9 +47,8 @@ class Derived extends Base {
   @Class.Public()
   public static publicCall(): void {
     console.log('OVERRIDING CALL');
-    Base.publicCall();
-    Base.protectedCall();
-    // (Base as any).privateCall();
+    super.publicCall();
+    this.protectedCall();
   }
 }
 

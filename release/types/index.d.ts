@@ -2,15 +2,11 @@
  * Copyright (C) 2018 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
+export { ClassDecorator, MemberDecorator, Constructor, Callable } from './types';
+export { Exception } from './exception';
 import { Helper } from './helper';
-export declare const Describe: typeof Helper.Describe;
-export declare const Public: typeof Helper.Public;
-export declare const Protected: typeof Helper.Protected;
-export declare const Private: typeof Helper.Private;
-export declare const trace: typeof Helper.trace;
-export declare const update: typeof Helper.update;
-export declare const call: typeof Helper.call;
-export declare const bind: typeof Helper.bind;
-export declare const bindDescriptor: typeof Helper.bindDescriptor;
-export declare const bindCallback: typeof Helper.bindCallback;
-export declare const bindPromise: typeof Helper.bindPromise;
+export import Describe = Helper.Describe;
+export import Public = Helper.Public;
+export import Protected = Helper.Protected;
+export import Private = Helper.Private;
+export import perform = Helper.perform;

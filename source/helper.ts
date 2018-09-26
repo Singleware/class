@@ -12,52 +12,52 @@ export namespace Helper {
   /**
    * All proxies.
    */
-  const allProxies: WeakMap<Object, Object> = new WeakMap();
+  const allProxies = new WeakMap<Object, Object>();
 
   /**
    * All classes.
    */
-  const allClasses: WeakMap<Object, Object> = new WeakMap();
+  const allClasses = new WeakMap<Object, Object>();
 
   /**
    * All saved callers.
    */
-  const allSavedCallers: WeakMap<Object, Object> = new WeakMap();
+  const allSavedCallers = new WeakMap<Object, Object>();
 
   /**
    * All instances types.
    */
-  const allTrustedInstances: WeakMap<Object, Object> = new WeakMap();
+  const allTrustedInstances = new WeakMap<Object, Object>();
 
   /**
    * All instances data.
    */
-  const allInstancesData: WeakMap<Object, any> = new WeakMap();
+  const allInstancesData = new WeakMap<Object, any>();
 
   /**
    * All public members.
    */
-  const allPublicMembers: WeakMap<Callable, Callable> = new WeakMap();
+  const allPublicMembers = new WeakMap<Callable, Callable>();
 
   /**
    * All protected members.
    */
-  const allProtectedMembers: WeakMap<Callable, Callable> = new WeakMap();
+  const allProtectedMembers = new WeakMap<Callable, Callable>();
 
   /**
    * All private members.
    */
-  const allPrivateMembers: WeakMap<Callable, Callable> = new WeakMap();
+  const allPrivateMembers = new WeakMap<Callable, Callable>();
 
   /**
    * Final class type.
    */
-  const finalType: Object = Reflect.getPrototypeOf(Function);
+  const finalType = Reflect.getPrototypeOf(Function);
 
   /**
    * Active class type.
    */
-  var activeCaller: Object = {};
+  var activeCaller = <Object>{};
 
   /**
    * Register the specified class instance as trusted for the specified class type.
@@ -481,7 +481,7 @@ export namespace Helper {
   function publicWrapper(type: Constructor, property: PropertyKey, callback: Callable): Callable {
     return addMember(allPublicMembers, property, callback, function(this: Object, ...args: any[]): any {
       if (activeCaller !== type) {
-        return callback.call(internalWrapper(this, type, true), ...args);
+        return resolveCallback(internalWrapper(this, type, true), type, callback, ...args);
       }
       return callback.call(this, ...args);
     });

@@ -460,7 +460,7 @@ var Helper;
     function publicWrapper(type, property, callback) {
         return addMember(allPublicMembers, property, callback, function (...args) {
             if (activeCaller !== type) {
-                return callback.call(internalWrapper(this, type, true), ...args);
+                return resolveCallback(internalWrapper(this, type, true), type, callback, ...args);
             }
             return callback.call(this, ...args);
         });

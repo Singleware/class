@@ -20,7 +20,7 @@ console.log('Inheritance');
  * Test scenario A
  */
 Tester.execute(`Call overridden methods from base to derived and goes to base again.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodA() {
             this.methodB();
         }
@@ -81,8 +81,9 @@ Tester.execute(`Call overridden methods from base to derived and goes to base ag
  * Test scenario B
  */
 Tester.execute(`Access inherited public and protected properties.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         constructor() {
+            super(...arguments);
             this.propertyA = 10;
             this.baseValue = 1;
         }
@@ -132,7 +133,7 @@ Tester.execute(`Access inherited public and protected properties.`, () => {
  * Test scenario C
  */
 Tester.execute(`Access inherited method that call private methods and properties.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodB() { }
         methodA() {
             this.methodB();

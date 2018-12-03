@@ -20,7 +20,7 @@ console.log('Public');
  * Test scenario A
  */
 Tester.execute(`Call a public method.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         methodA() {
             this.methodD();
             this.methodE();
@@ -46,8 +46,9 @@ Tester.execute(`Call a public method.`, () => {
  * Test scenario B
  */
 Tester.execute(`Access public properties.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super(...arguments);
             this.propertyA = 10;
         }
         get propertyB() {

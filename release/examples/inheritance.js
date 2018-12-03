@@ -17,12 +17,13 @@ const Class = require("../source");
 /**
  * Example of inheritance.
  */
-let Base = class Base {
+let Base = class Base extends Class.Null {
     /**
      * Example of base constructor.
      * Don't use decorators here.
      */
     constructor() {
+        super();
         this.publicCall();
     }
     /**

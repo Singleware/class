@@ -20,7 +20,7 @@ console.log('Security.Protected');
  * Security scenario A
  */
 Tester.exception(`Deny access to the protected method from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         method() { }
     };
     __decorate([
@@ -35,8 +35,9 @@ Tester.exception(`Deny access to the protected method from public context.`, () 
  * Security scenario B
  */
 Tester.exception(`Deny access to the protected getter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super(...arguments);
             this.property = 10;
         }
     };
@@ -52,8 +53,9 @@ Tester.exception(`Deny access to the protected getter from public context.`, () 
  * Security scenario C
  */
 Tester.exception(`Deny access to the protected setter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super(...arguments);
             this.property = 10;
         }
     };

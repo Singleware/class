@@ -19,11 +19,12 @@ console.log('Security.Override');
 /**
  * Base class.
  */
-let Base = class Base {
+let Base = class Base extends Class.Null {
     /**
      * Base class.
      */
     constructor() {
+        super(...arguments);
         this.propertyA = 0;
         this.propertyB = 0;
         this.propertyC = 0;

@@ -23,7 +23,7 @@ async function print(text) {
 /**
  * Example of asynchronous class.
  */
-let AsyncA = class AsyncA {
+let AsyncA = class AsyncA extends Class.Null {
     /**
      * Example of private method.
      * @param interval Method interval.
@@ -69,7 +69,7 @@ AsyncA = __decorate([
 /**
  * Example of asynchronous concurrent class.
  */
-let AsyncB = class AsyncB {
+let AsyncB = class AsyncB extends Class.Null {
     /**
      * Example of private method.
      * @param interval Method interval.

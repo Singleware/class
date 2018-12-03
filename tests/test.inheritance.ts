@@ -15,7 +15,7 @@ console.log('Inheritance');
  */
 Tester.execute(`Call overridden methods from base to derived and goes to base again.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public methodA(): void {
       this.methodB();
@@ -64,7 +64,7 @@ Tester.execute(`Call overridden methods from base to derived and goes to base ag
  */
 Tester.execute(`Access inherited public and protected properties.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Protected()
     protected propertyA = 10;
     @Class.Public()
@@ -99,7 +99,7 @@ Tester.execute(`Access inherited public and protected properties.`, () => {
  */
 Tester.execute(`Access inherited method that call private methods and properties.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Private()
     private methodB(): void {}
 

@@ -18,7 +18,7 @@ async function print(text: string): Promise<void> {
  * Example of asynchronous class.
  */
 @Class.Describe()
-class AsyncA {
+class AsyncA extends Class.Null {
   /**
    * Example of private method.
    * @param interval Method interval.
@@ -57,7 +57,7 @@ class AsyncA {
  * Example of asynchronous concurrent class.
  */
 @Class.Describe()
-class AsyncB {
+class AsyncB extends Class.Null {
   /**
    * Example of private method.
    * @param interval Method interval.

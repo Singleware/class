@@ -17,7 +17,7 @@ const Class = require("../source");
 /**
  * Example of static members.
  */
-let Base = class Base {
+let Base = class Base extends Class.Null {
     /**
      * Example of private method.
      */

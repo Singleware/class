@@ -14,7 +14,7 @@ console.log('Security.Override');
  * Base class.
  */
 @Class.Describe()
-class Base {
+class Base extends Class.Null {
   @Class.Public()
   methodA(): void {}
 

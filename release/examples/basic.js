@@ -17,12 +17,13 @@ const Class = require("../source");
 /**
  * Example of basic class.
  */
-let Basic = class Basic {
+let Basic = class Basic extends Class.Null {
     /**
      * Example of constructor.
      * Don't use decorators here.
      */
     constructor() {
+        super();
         this.privateCall();
         this.protectedCall();
         this.publicCall();

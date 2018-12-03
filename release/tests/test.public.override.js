@@ -20,7 +20,7 @@ console.log('Public.Override');
  * Test scenario A
  */
 Tester.execute(`Override the public method from base class.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodA() {
             this.methodB();
         }
@@ -52,7 +52,7 @@ Tester.execute(`Override the public method from base class.`, () => {
  * Test scenario B
  */
 Tester.execute(`Override the public method from base class and calls the base method by 'super' keyword.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodA() {
             this.methodB();
         }
@@ -84,8 +84,9 @@ Tester.execute(`Override the public method from base class and calls the base me
  * Test scenario C
  */
 Tester.execute(`Override the public method from base class and calls during object construction.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         constructor() {
+            super();
             this.methodA();
         }
         methodA() {

@@ -20,8 +20,9 @@ console.log('Constructor');
  * Test scenario A
  */
 Tester.execute(`Call internals methods in object construction.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super();
             this.methodA();
             this.methodB();
             this.methodC();
@@ -65,8 +66,9 @@ Tester.execute(`Call internals methods in object construction.`, () => {
  * Test scenario B
  */
 Tester.execute(`Define own internal properties in object construction.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super();
             this.propertyA = 10;
             this.propertyB = 20;
             this.propertyC = 30;
@@ -98,8 +100,9 @@ Tester.execute(`Define own internal properties in object construction.`, () => {
  * Test scenario C
  */
 Tester.execute(`Call internal methods and properties during an inherited construction.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         constructor() {
+            super();
             this.propertyA = 10;
             this.methodA();
         }
@@ -154,10 +157,11 @@ Tester.execute(`Call internal methods and properties during an inherited constru
  * Test scenario D
  */
 Tester.execute(`Method binding in object construction (bind the unwrapped 'this' and call after)`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         constructor() {
+            super(...arguments);
             this.callbackA = this.methodA.bind(this);
-            this.callbackB = this.methodB.bind(this);
+            this.callbackB = () => this.methodB();
         }
         methodA() { }
         methodB() { }
@@ -181,7 +185,7 @@ Tester.execute(`Method binding in object construction (bind the unwrapped 'this'
         constructor() {
             super(...arguments);
             this.callbackC = this.methodC.bind(this);
-            this.callbackD = this.methodD.bind(this);
+            this.callbackD = () => this.methodD();
         }
         methodC() { }
         methodD() { }

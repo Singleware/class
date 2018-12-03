@@ -19,7 +19,7 @@ declare const __decorate: any;
  * Test class.
  */
 @Class.Describe()
-class Test {
+class Test extends Class.Null {
   @Class.Private()
   static privateStaticMethod(): void {}
 

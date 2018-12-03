@@ -11,7 +11,7 @@ import * as Class from '../source';
  * Example of static members.
  */
 @Class.Describe()
-class Base {
+class Base extends Class.Null {
   /**
    * Example of private method.
    */

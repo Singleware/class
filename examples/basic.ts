@@ -11,12 +11,13 @@ import * as Class from '../source';
  * Example of basic class.
  */
 @Class.Describe()
-class Basic {
+class Basic extends Class.Null {
   /**
    * Example of constructor.
    * Don't use decorators here.
    */
   constructor() {
+    super();
     this.privateCall();
     this.protectedCall();
     this.publicCall();

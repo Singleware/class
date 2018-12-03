@@ -15,7 +15,7 @@ console.log('Protected.Override.Static');
  */
 Tester.execute(`Override the protected static method from base class.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public static methodA(): void {
       this.methodB();
@@ -41,7 +41,7 @@ Tester.execute(`Override the protected static method from base class.`, () => {
  */
 Tester.execute(`Override the protected static method from base class and calls the base method by 'super' keyword.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Protected()
     protected static methodA(): void {
       this.methodB();

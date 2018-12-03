@@ -17,7 +17,7 @@ Tester.exception(
   `Deny access to the protected static method from public context.`,
   () => {
     @Class.Describe()
-    class Test {
+    class Test extends Class.Null {
       @Class.Protected()
       static method(): void {}
     }
@@ -34,7 +34,7 @@ Tester.exception(
   `Deny access to the protected static getter from public context.`,
   () => {
     @Class.Describe()
-    class Test {
+    class Test extends Class.Null {
       @Class.Protected()
       static property = 10;
     }
@@ -51,7 +51,7 @@ Tester.exception(
   `Deny access to the protected static setter from public context.`,
   () => {
     @Class.Describe()
-    class Test {
+    class Test extends Class.Null {
       @Class.Protected()
       static property = 10;
     }

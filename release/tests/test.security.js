@@ -19,7 +19,7 @@ console.log('Security');
 /**
  * Test class.
  */
-let Test = class Test {
+let Test = class Test extends Class.Null {
     static privateStaticMethod() { }
     static protectedStaticMethod() { }
     privateMethod() { }

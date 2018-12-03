@@ -20,7 +20,7 @@ console.log('Security.Private');
  * Security scenario A
  */
 Tester.exception(`Deny access to the private method from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         method() { }
     };
     __decorate([
@@ -35,8 +35,9 @@ Tester.exception(`Deny access to the private method from public context.`, () =>
  * Security scenario B
  */
 Tester.exception(`Deny access to the private getter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super(...arguments);
             this.property = 10;
         }
     };
@@ -52,8 +53,9 @@ Tester.exception(`Deny access to the private getter from public context.`, () =>
  * Security scenario C
  */
 Tester.exception(`Deny access to the private setter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         constructor() {
+            super(...arguments);
             this.property = 10;
         }
     };

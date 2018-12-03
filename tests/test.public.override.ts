@@ -15,7 +15,7 @@ console.log('Public.Override');
  */
 Tester.execute(`Override the public method from base class.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public methodA(): void {
       this.methodB();
@@ -41,7 +41,7 @@ Tester.execute(`Override the public method from base class.`, () => {
  */
 Tester.execute(`Override the public method from base class and calls the base method by 'super' keyword.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public methodA(): void {
       this.methodB();
@@ -67,13 +67,14 @@ Tester.execute(`Override the public method from base class and calls the base me
  */
 Tester.execute(`Override the public method from base class and calls during object construction.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public methodA(): void {
       throw new Error(`Method does not overwritten.`);
     }
 
     constructor() {
+      super();
       this.methodA();
     }
   }

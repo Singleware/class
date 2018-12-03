@@ -15,7 +15,7 @@ console.log('Public.Static');
  */
 Tester.execute(`Call a public method.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Public()
     public static methodA(): void {
       this.methodD();
@@ -37,7 +37,7 @@ Tester.execute(`Call a public method.`, () => {
  */
 Tester.execute(`Access public properties.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Public()
     public static propertyA = 10;
 

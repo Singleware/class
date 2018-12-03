@@ -20,7 +20,7 @@ console.log('Public.Override.Static');
  * Test scenario A
  */
 Tester.execute(`Override the public static method from base class.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         static methodA() {
             this.methodB();
         }
@@ -52,7 +52,7 @@ Tester.execute(`Override the public static method from base class.`, () => {
  * Test scenario B
  */
 Tester.execute(`Override the public static method from base class and calls the base method by 'super' keyword.`, () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         static methodA() {
             this.methodB();
         }

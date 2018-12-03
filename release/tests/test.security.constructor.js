@@ -17,7 +17,7 @@ const Tester = require("./helper");
 /**
  * Base class.
  */
-let Base = class Base {
+let Base = class Base extends Class.Null {
     /**
      * Private method.
      */

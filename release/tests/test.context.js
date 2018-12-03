@@ -20,7 +20,7 @@ console.log('Context');
  * Test scenario A
  */
 Tester.execute(`Call internal methods from callback context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         methodA() {
             return () => {
                 this.methodC();
@@ -59,7 +59,7 @@ Tester.execute(`Call internal methods from callback context.`, () => {
  */
 Tester.execute(`Call internal methods from another instance of same type.`, () => {
     var Test_1;
-    let Test = Test_1 = class Test {
+    let Test = Test_1 = class Test extends Class.Null {
         static methodAA() { }
         static methodAB() { }
         methodBA() { }

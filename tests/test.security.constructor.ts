@@ -11,7 +11,7 @@ import * as Tester from './helper';
  * Base class.
  */
 @Class.Describe()
-class Base {
+class Base extends Class.Null {
   /**
    * Private method.
    */

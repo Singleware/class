@@ -11,12 +11,13 @@ import * as Class from '../source';
  * Example of inheritance.
  */
 @Class.Describe()
-class Base {
+class Base extends Class.Null {
   /**
    * Example of base constructor.
    * Don't use decorators here.
    */
   constructor() {
+    super();
     this.publicCall();
   }
   /**

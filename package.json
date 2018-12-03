@@ -7,25 +7,27 @@
   "name": "@singleware/class",
   "description": "Singleware class visibility package.",
   "license": "MIT",
-  "version": "1.1.12",
+  "version": "1.1.18",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
-    "class",
     "class visibility",
-    "oop class",
-    "member visibility"
+    "member visibility",
+    "class member visibility",
+    "private member runtime",
+    "protected member runtime",
+    "public member runtime"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/singleware/class"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {},
   "devDependencies": {
-    "prettier": "^1.14.2",
+    "prettier": "^1.15.3",
     "typescript": "^2.9.2"
   },
   "prettier": {

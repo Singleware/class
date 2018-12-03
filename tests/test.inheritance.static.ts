@@ -15,7 +15,7 @@ console.log('Inheritance.Static');
  */
 Tester.execute(`Call overridden static methods from base to derived and goes to base again.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public static methodA(): void {
       this.methodB();
@@ -64,7 +64,7 @@ Tester.execute(`Call overridden static methods from base to derived and goes to 
  */
 Tester.execute(`Access inherited static public and static protected properties.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Protected()
     protected static propertyA = 10;
     @Class.Public()
@@ -97,7 +97,7 @@ Tester.execute(`Access inherited static public and static protected properties.`
  */
 Tester.execute(`Access inherited method that call private static methods and properties.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Private()
     private static methodB(): void {}
 

@@ -15,7 +15,7 @@ console.log('Constructor');
  */
 Tester.execute(`Call internals methods in object construction.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Public()
     public methodA(): void {
       this.methodD();
@@ -41,6 +41,7 @@ Tester.execute(`Call internals methods in object construction.`, () => {
     protected methodE(): void {}
 
     constructor() {
+      super();
       this.methodA();
       this.methodB();
       this.methodC();
@@ -55,7 +56,7 @@ Tester.execute(`Call internals methods in object construction.`, () => {
  */
 Tester.execute(`Define own internal properties in object construction.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Private()
     private propertyA: number;
 
@@ -66,6 +67,7 @@ Tester.execute(`Define own internal properties in object construction.`, () => {
     public propertyC: number;
 
     constructor() {
+      super();
       this.propertyA = 10;
       this.propertyB = 20;
       this.propertyC = 30;
@@ -88,7 +90,7 @@ Tester.execute(`Define own internal properties in object construction.`, () => {
  */
 Tester.execute(`Call internal methods and properties during an inherited construction.`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Private()
     private propertyA: number;
 
@@ -96,6 +98,7 @@ Tester.execute(`Call internal methods and properties during an inherited constru
     private methodA(): void {}
 
     constructor() {
+      super();
       this.propertyA = 10;
       this.methodA();
     }
@@ -139,12 +142,12 @@ Tester.execute(`Call internal methods and properties during an inherited constru
  */
 Tester.execute(`Method binding in object construction (bind the unwrapped 'this' and call after)`, () => {
   @Class.Describe()
-  class Base {
+  class Base extends Class.Null {
     @Class.Public()
     public callbackA = this.methodA.bind(this);
 
     @Class.Public()
-    public callbackB = this.methodB.bind(this);
+    public callbackB = () => this.methodB();
 
     @Class.Private()
     private methodA() {}
@@ -159,7 +162,7 @@ Tester.execute(`Method binding in object construction (bind the unwrapped 'this'
     public callbackC = this.methodC.bind(this);
 
     @Class.Public()
-    public callbackD = this.methodD.bind(this);
+    public callbackD = () => this.methodD();
 
     @Class.Private()
     private methodC() {}

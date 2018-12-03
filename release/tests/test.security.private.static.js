@@ -20,7 +20,7 @@ console.log('Security.Private.Static');
  * Security scenario A
  */
 Tester.exception(`Deny access to the private static method from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
         static method() { }
     };
     __decorate([
@@ -35,7 +35,7 @@ Tester.exception(`Deny access to the private static method from public context.`
  * Security scenario B
  */
 Tester.exception(`Deny access to the private static getter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
     };
     Test.property = 10;
     __decorate([
@@ -50,7 +50,7 @@ Tester.exception(`Deny access to the private static getter from public context.`
  * Security scenario C
  */
 Tester.exception(`Deny access to the private static setter from public context.`, () => {
-    let Test = class Test {
+    let Test = class Test extends Class.Null {
     };
     Test.property = 10;
     __decorate([

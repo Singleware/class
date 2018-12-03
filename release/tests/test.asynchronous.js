@@ -25,7 +25,7 @@ async function external() {
  * Test scenario A
  */
 Tester.execute(`Call internal methods by 'this' keyword between chained promises.`, async () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodB() { }
     };
     __decorate([
@@ -59,7 +59,7 @@ Tester.execute(`Call internal methods by 'this' keyword between chained promises
  * Test scenario B
  */
 Tester.execute(`Call inherited methods by 'super' keyword between chained promises.`, async () => {
-    let Base = class Base {
+    let Base = class Base extends Class.Null {
         methodB() { }
         methodC() { }
     };
@@ -79,9 +79,7 @@ Tester.execute(`Call inherited methods by 'super' keyword between chained promis
             await Class.perform(this, async () => {
                 super.methodB();
                 await external();
-                await Class.perform(this, async () => {
-                    super.methodC();
-                });
+                await Class.perform(this, async () => super.methodC());
             });
         }
     };
@@ -106,9 +104,7 @@ Tester.execute(`Call internal methods from another instance of same type between
             await Class.perform(this, async () => {
                 other.methodB();
                 await external();
-                await Class.perform(this, async () => {
-                    other.methodC();
-                });
+                await Class.perform(this, async () => other.methodC());
             });
         }
         methodB() { }

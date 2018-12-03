@@ -15,7 +15,7 @@ console.log('Context');
  */
 Tester.execute(`Call internal methods from callback context.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Public()
     public methodA(): Function {
       return () => {
@@ -48,7 +48,7 @@ Tester.execute(`Call internal methods from callback context.`, () => {
  */
 Tester.execute(`Call internal methods from another instance of same type.`, () => {
   @Class.Describe()
-  class Test {
+  class Test extends Class.Null {
     @Class.Private()
     private static methodAA(): void {}
 

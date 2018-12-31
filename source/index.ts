@@ -41,6 +41,12 @@ export const Protected = (): MemberDecorator => Helper.Protected();
 export const Private = (): MemberDecorator => Helper.Private();
 
 /**
+ * Decorates the specified class member to be an enumerable property at runtime.
+ * @returns Returns the decorator method.
+ */
+export const Property = (): MemberDecorator => Helper.Property();
+
+/**
  * Performs the specified callback using the specified context rules.
  * @param context Context instance.
  * @param callback Callback to be performed.

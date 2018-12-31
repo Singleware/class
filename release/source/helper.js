@@ -320,6 +320,16 @@ var Helper;
     }
     Helper.Private = Private;
     /**
+     * Decorates the specified class member to be an enumerable property at runtime.
+     * @returns Returns the decorator method.
+     */
+    function Property() {
+        return (target, property, descriptor) => {
+            return ((descriptor || (descriptor = createMember(target, property))).enumerable = true), descriptor;
+        };
+    }
+    Helper.Property = Property;
+    /**
      * Performs the specified callback using the specified context rules.
      * @param context Context instance.
      * @param callback Callback to be performed.

@@ -31,6 +31,11 @@ exports.Protected = () => helper_1.Helper.Protected();
  */
 exports.Private = () => helper_1.Helper.Private();
 /**
+ * Decorates the specified class member to be an enumerable property at runtime.
+ * @returns Returns the decorator method.
+ */
+exports.Property = () => helper_1.Helper.Property();
+/**
  * Performs the specified callback using the specified context rules.
  * @param context Context instance.
  * @param callback Callback to be performed.

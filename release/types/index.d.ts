@@ -34,6 +34,11 @@ export declare const Protected: () => MemberDecorator;
  */
 export declare const Private: () => MemberDecorator;
 /**
+ * Decorates the specified class member to be an enumerable property at runtime.
+ * @returns Returns the decorator method.
+ */
+export declare const Property: () => MemberDecorator;
+/**
  * Performs the specified callback using the specified context rules.
  * @param context Context instance.
  * @param callback Callback to be performed.
